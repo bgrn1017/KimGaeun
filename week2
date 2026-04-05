@@ -1,1 +1,155 @@
+#include<iostream>
+using namespace std;
 
+int plane[3][4][6] = { 0 };		// 3차원 배열로 만든 3구역 4행 6열 비행기 좌석표
+
+void printplane() {		// 비행기 좌석표를 출력하는 사용자 정의 함수
+	cout << "\n\n";
+
+	for (int zone = 0; zone < 3; zone++) {		// 3구역
+		cout << "1 2 3   4 5 6  (" << zone + 1 << "구역)\n";
+		cout << "---------------\n";
+
+		for (int garo = 0; garo < 4; garo++) {		// 4행
+			for (int selo = 0; selo < 6; selo++) {		// 6열
+				cout << plane[zone][garo][selo] << " ";
+				if (selo == 2) {		// 복도 만들기
+					cout << "  ";
+				}
+			}
+			cout << "\n";
+		}
+
+		if (zone < 2) {		// 1구역과 2구역, 2구역과 3구역 사이 선 입력하기
+			cout << "---------------\n";
+		}
+	}
+	cout << "\n";
+}
+
+int main() {
+	int adult, kid;		// 성인, 유아 인원 수
+
+	int total_adult = 0;		// 총 성인 인원 수
+	int total_kid = 0;		// 총 유아 인원 수
+
+	int total;		// 총 인원 수 
+
+
+	while (true) {
+		cout << "**비행기 예약 시스템**\n";
+		cout << "1. 좌석 예약 \n2. 좌석 변경 \n3. 프로그램 종료 \n";
+		cout << "번호를 입력하세요 : ";
+
+		int num;
+		cin >> num;		// 입력 받은 번호를 num에 저장
+
+		if (num == 1) {		// 1. 좌석 예약
+			printplane();		// 좌석표 출력
+
+			cout << "성인 (50,000원): ";
+			cin >> adult;
+			cout << "\n유아 (40,000원): ";
+			cin >> kid;
+
+			total_adult += adult;		// 나중에 추가되는 인원도 누적되어야 하기 때문에 += 사용
+			total_kid += kid;
+
+			total = adult + kid;		// 성인과 유아를 모두 합한 총 인원 수
+
+			for (int i = 0; i < total; i++) {
+				while (true) {
+					cout << "\n어떤 구역을 예약하시겠습니까?\n";
+					int p_zone;
+					cin >> p_zone;
+
+					if (p_zone < 1 || p_zone > 3) {		// 1구역 ~ 3구역을 벗어난 경우
+						cout << "예약가능한 구역이 아닙니다.\n";
+						continue;
+					}
+
+					cout << "몇열, 몇번째 좌석을 예약하시겠습니까?\n";
+					int p_garo, p_selo;
+					cin >> p_garo >> p_selo;
+
+					if (p_garo < 1 || p_garo >4 || p_selo < 1 || p_selo > 6) {		// 1~4행이나 1~6열을 벗어난 경우 (모두 벗어나면 안 되기 때문에 OR 연산 사용)
+						cout << "\n예약가능한 좌석이 아닙니다.\n";
+						continue;
+					}
+
+					else if (plane[p_zone - 1][p_garo - 1][p_selo - 1] == 1) {		// 선택한 좌석이 이미 예약된 좌석(= 1로 표시된 좌석)인 경우
+						cout << "\n이미 예약되었습니다. 다른 좌석을 선택하세요.\n";
+						continue;
+					}
+					else {
+						plane[p_zone - 1][p_garo - 1][p_selo - 1] = 1;		// 예약한 좌석은 1로 변경
+						cout << "\n예약되었습니다.\n";
+						break;
+					}
+				}
+			}
+			printplane();
+		}
+
+		else if (num == 2) {		// 2. 좌석 변경
+			printplane();
+
+			int change;
+			cout << "바꿀 좌석의 개수를 입력하세요. : ";
+			cin >> change;
+
+			for (int i = 0; i < change;) {
+				cout << "현재 좌석과 바꿀 좌석을 입력하세요.\n";
+				int now_zone, now_garo, now_selo;
+
+				while (true) {
+					cout << "현재 좌석 (H구역, N열, M번째) : ";		
+					cin >> now_zone >> now_garo >> now_selo;
+
+					if (plane[now_zone - 1][now_garo - 1][now_selo - 1] == 0) {		// 현재 예약되어 있는 좌석이 아닌 좌석을 입력한 경우
+						cout << "현재 좌석이 틀렸습니다. 다시 입력해주세요.\n";
+					}
+
+					else if (now_zone < 1 || now_zone > 3 || now_garo < 1 || now_garo > 4 || now_selo < 1 || now_selo > 6) {		// 입력한 좌석이 1~4행이나 1~6열을 벗어나는 경우 (모두 벗어나면 안 되기 때문에 OR 연산 사용)
+							cout << "좌석 번호를 다시 입력해주세요.\n";
+					}
+
+					else {
+						break;		// 입력한 좌석이 옳은 좌석이면 변경할 좌석 입력으로 넘어감
+					}
+				}
+
+				int new_zone, new_garo, new_selo;
+				cout << "변경 좌석 (H구역, N열, M번째) : ";
+				cin >> new_zone >> new_garo >> new_selo;
+
+				if (new_zone < 1 || new_zone > 3 || new_garo < 1 || new_garo > 4 || new_selo < 1 || new_selo > 6) {		// 입력한 좌석이 1~3구역이나 1~4행, 1~6열을 벗어난 경우 (모두 벗어나면 안 되기 때문에 OR 연산 사용)
+					cout << "좌석 번호를 다시 입력해주세요.\n";
+				}
+
+				else if (now_zone == new_zone && now_garo == new_garo && now_selo == new_selo) {		// 변경할 좌석이 현재 좌석과 동일할 때 (구역, 행, 열 모두 같아야하므로 AND 연산 사용)
+					cout << "똑같은 좌석입니다. 다른 좌석을 선택하세요.\n";
+				}
+
+				else if (plane[new_zone - 1][new_garo - 1][new_selo - 1] == 1) {		// 선택한 좌석이 이미 예약된 좌석(= 1로 표시된 좌석)인 경우
+					cout << "이미 예약되었습니다. 다른 좌석을 선택하세요.\n";
+				}
+
+				else {
+					plane[now_zone - 1][now_garo - 1][now_selo - 1] = 0;		// 현재 좌석은 0으로 변경 (예약 취소)
+					plane[new_zone - 1][new_garo - 1][new_selo - 1] = 1;		// 바꿀 좌석은 1로 변경 (예약)
+					cout << "변경되었습니다.\n";
+					i++;
+				}
+			}
+			printplane();
+		}
+
+		else if (num == 3) {
+			cout << "총 " << total_adult * 50000 + total_kid * 40000 << "원입니다.\n";		// 총 성인 수 * 성인 요금 + 총 유아 수 * 유아 요금을 계산하여 총 금액 출력
+			break;
+		}
+	}
+
+	return 0;
+}
