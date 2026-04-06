@@ -1,0 +1,59 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+int total = 0;
+int moneyArr[100];
+string nameArr[100];
+int num;
+
+void system() {
+	cout << "============ 은행 계좌 관리 시스템 ============\n";
+	cout << "1. 현재 등록된 계좌 리스트 보기\n";
+	cout << "2. 신규 계좌 등록\n";
+	cout << "3. 입금 및 출금\n";
+	cout << "4. 계좌 간 이체\n";
+	cout << "5. 프로그램 종료\n";
+	cout << "===============================================\n";
+}
+
+int main() {
+	while(true) {
+		system();
+		cout << ">> 메뉴 선택 : ";
+		cin >> num;
+
+		if (num < 1 || num > 6) {
+			cout << "올바른 번호를 입력해주세요.\n";
+		}
+
+		else if (num == 1) {
+			if (total == 0) {
+				cout << "(등록된 계좌가 없습니다.)";
+			}
+
+			else {
+				cout << "-------- [현재 등록된 계좌 리스트] --------";
+				for (int i = 0; i < total; i++) {
+					cout << i << ". 이름 : " << nameArr[i] << "        " << "| 잔액 : " << moneyArr[i] << "원\n";
+					cout << "-------------------------------------------";
+				}
+			}
+		}
+
+		else if (num == 2) {
+			cout << "\n[신규 계좌 등록]\n";
+
+			cout << "등록할 이름 : ";
+			cin >> nameArr[total];
+			total += 1;
+			cout << "\n";
+
+			cout << "초기 잔액 : ";
+			cin >> moneyArr[total];
+			cout << "\n";
+
+			cout << "신규 계좌 등록을 완료했습니다.\n";
+		}
+	}
+}
