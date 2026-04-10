@@ -3,6 +3,7 @@
 
 using namespace std;
 
+// 수정 전 코드로 올려놨네요... 수정했습니다!!
 
 int find_account(string name[], int count, string f_name) {     // Call by Value - 해당 주소에 어떤 값이 있는지만 확인하면 됨
     for (int i = 0; i < count; i++) {
@@ -131,8 +132,6 @@ int main() {
             int amount;
             cout << "이체할 금액 : ";
             cin >> amount;
-
-            int amount;
 
             int to_acc = find_account(name, total_acc, to);
             int from_acc = find_account(name, total_acc, from);
