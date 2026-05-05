@@ -1,0 +1,105 @@
+#include <iostream>
+using namespace std;
+
+class Espresso {		// 에스프레소 클래스
+public:		// main 함수에서 사용하기 위해 public 접근지정자 사용
+	int shot = 0;
+	int size = 0;
+	int cup = 0;
+	Espresso();		// 생성자
+	~Espresso();		// 소멸자
+};
+
+Espresso::Espresso() {		// 생성자 구현
+	cout << "사이즈를 선택하세요. (Tall - 1 / Grande - 2) : ";
+	cin >> size;
+	cout << "잔 수를 입력하세요. : ";
+	cin >> cup;
+	if (size == 1)
+		shot = 1;
+	else if (size == 2)
+		shot = 2;
+	else
+		cout << "잘못된 번호를 입력했습니다.";
+}
+Espresso::~Espresso() {}		// 소멸자 구현
+
+class Americano {		// 아메리카노 클래스
+public:		// main 함수에서 사용하기 위해 public 접근지정자 사용
+	int water = 0;		// 아메리카노는 물
+	Americano(const Espresso esp);		// 생성자
+	~Americano();		// 소멸자
+};
+
+Americano::Americano(Espresso esp) {		// 생성자 구현
+	if (esp.size == 1) {		// Tall 사이즈를 선택한 경우
+		water = 350;		// 물 350 ml
+		cout << "에스프레소 "  << esp.shot * esp.cup << "샷과 물 " << water * esp.cup << "ml를 넣었습니다." << endl;
+		cout << "Tall 사이즈 아메리카노 " << esp.cup << "잔이 완성되었습니다." << endl;
+	}
+	else if (esp.size == 2) {		// Grande 사이즈를 선택한 경우
+		water = 500;		// 물 500 ml
+		cout << "에스프레소 " << esp.shot * esp.cup << "샷과 물 " << water * esp.cup << "ml를 넣었습니다." << endl;
+		cout << "Grande 사이즈 아메리카노 " << esp.cup << "잔이 완성되었습니다." << endl;
+	}
+}
+Americano::~Americano() {}		// 소멸자 구현
+
+class Latte {		// 라떼 클래스
+public:		// main 함수에서 사용하기 위해 public 접근지정자 사용
+	int milk = 0;		// 라떼는 우유
+	Latte(const Espresso esp);		// 생성자
+	~Latte();		// 소멸자
+};
+
+Latte::Latte(Espresso esp) {		// 생성자 구현
+	if (esp.size == 1) {
+		milk = 350;
+		cout << "에스프레소 " << esp.shot * esp.cup << "샷과 우유 " << milk * esp.cup << "ml를 넣었습니다." << endl;
+		cout << "Tall 사이즈 라떼 " << esp.cup << "잔이 완성되었습니다." << endl;
+	}
+	else if (esp.size == 2) {
+		milk = 500;
+		cout << "에스프레소 " << esp.shot * esp.cup << "샷과 우유 " << milk * esp.cup << "ml를 넣었습니다." << endl;
+		cout << "Grande 사이즈 라떼 " << esp.cup << "잔이 완성되었습니다." << endl;
+	}
+}
+Latte::~Latte() {}		// 소멸자 구현
+
+int main() {
+	while (true) {		// '3. 종료'를 선택할 때까지 반복
+		int num = 0;
+	
+		cout << "================= [ coffee machine ] =================" << endl;		// 메뉴 출력
+		cout << "1. 아메리카노" << endl;
+		cout << "2. 라떼" << endl;
+		cout << "3. 종료" << endl;
+		cout << "==================================================" << endl;
+
+		cout << "메뉴를 선택하세요. : ";
+		cin >> num;
+
+		if (num == 1 || num == 2) {		// '1. 아메리카노' 또는 '2. 라떼'를 선택한 경우
+			Espresso e;		// 매개변수가 없는 Espresso 함수 호출
+			cout << "--------------------------------------------------";
+			if (num == 1) {		// '1. 아메리카노'를 선택한 경우
+				cout << endl;
+				Americano a(e);		// 매개변수가 있는 Americano 함수 호출
+			}
+			else if(num == 2) {		// '2. 라떼'를 선택한 경우
+				cout << endl;
+				Latte l(e);		// 매개변수가 있는 Latte 함수 호출
+			}
+		}
+		else if (num == 3) {		// '3. 종료'를 선택한 경우
+			cout << "프로그램을 종료합니다." << endl;
+			break;		// 프로그램 종료
+		}
+		else {		// 1~3 외 다른 숫자를 선택한 경우
+			cout << "잘못된 번호를 입력했습니다." << endl;		// 다시 메뉴 출력
+		}
+	cout << endl;
+
+	}
+	return 0;
+}
