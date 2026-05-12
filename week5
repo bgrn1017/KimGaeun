@@ -1,0 +1,156 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class Item {
+public:
+    string name;
+    int price;
+    int count;
+
+    Item() {
+        name = "";
+        price = 0;
+        count = 0;
+    }
+
+    Item(string n, int p, int c) {
+        name = n;
+        price = p;
+        count = c;
+    }
+
+    int totalPrice() {
+        return price * count;
+    }
+
+    void display() {
+        cout << "- " << name << " [" << count << "개] : "
+            << totalPrice() << "원 (단가: " << price << "원)" << endl;
+    }
+};
+
+void addCart() {
+    string n;
+    int p, c;
+
+    cout << "상품 이름 : ";
+    cin >> n;
+
+    cout << "가격 : ";
+    cin >> p;
+
+    cout << "수량 : ";
+    cin >> c;
+}
+
+void pay(Item* cart, int& count, vector<Item>& history) {   // 함수 외부의 데이터를 사용하기 위해 가져옴
+    cout << endl;
+    if (count == 0) {
+        cout << "장바구니에 담긴 상품이 없습니다." << endl;
+    }
+    else {
+        cout << "-------- [ 결제 상세 내역 ] --------" << endl;
+
+        int totalSum = 0;
+
+        for (int i = 0; i < count; i++) {
+            cart[i].display();
+            totalSum += cart[i].totalPrice();
+        }
+
+        cout << "------------------------------------" << endl;
+        cout << "최종 결제 금액 : " << totalSum << "원" << endl;
+
+        char yn;
+        cout << "결제하시겠습니까? (Y/N) : ";
+        cin >> yn;
+
+        if (yn == 'Y' || yn == 'y') {
+            for (int i = 0; i < count; i++) {
+                history.push_back(cart[i]);
+            }
+            count = 0;
+            cout << "결제가 완료되었습니다. 장바구니를 비웁니다." << endl;
+        }
+        else {
+            cout << "결제가 취소되었습니다." << endl;
+        }
+    }
+}
+
+int main() {
+    int cartSize = 100;
+
+    Item* cart = new Item[cartSize];    // 동적 배열 할당 (new 연산자)
+    int cartCount = 0;
+
+    vector<Item> history;   // 결제 내역을 저장하는 벡터
+
+    int num;
+
+    while (true) {
+        cout << "======== 쇼핑몰 장바구니 시스템 ========" << endl;
+        cout << "1. 장바구니 담기" << endl;
+        cout << "2. 장바구니 목록 보기" << endl;
+        cout << "3. 결제하기" << endl;
+        cout << "4. 전체 결제 내역 확인" << endl;
+        cout << "5. 프로그램 종료" << endl;
+        cout << ">> 메뉴 선택 : ";
+        cin >> num;
+
+        if (num == 1) {
+            if (cartCount < cartSize) {
+                string n;
+                int p, c;
+
+                cout << endl;
+                cout << "[장바구니 담기]" << endl;
+                cout << "상품 이름 : ";
+                cin >> n;
+                cout << "가격 : ";
+                cin >> p;
+                cout << "수량 : ";
+                cin >> c;
+
+                cart[cartCount] = Item(n, p, c);
+                cartCount++;
+
+                cout << "상품 추가 완료했습니다." << endl;
+            }
+        }
+        else if (num == 2) {
+            cout << endl;
+            cout << "-------- [장바구니 목록] --------" << endl;
+            if (cartCount == 0) {
+                cout << "(장바구니에 담긴 상품이 없습니다.)" << endl;
+            }
+            for (int i = 0; i < cartCount; i++) {
+                cart[i].display();
+            }
+            cout << "---------------------------------" << endl;
+        }
+        else if (num == 3) {
+            pay(cart, cartCount, history);
+        }
+        else if (num == 4) {
+            cout << endl;
+            cout << "[주문 상세 내역]" << endl;
+
+            for (auto& h : history) {
+                h.display();
+            }
+        }
+        else if (num == 5) {
+            cout << endl;
+            delete[] cart;  // 동적 배열 해제 (delete)
+            cout << "프로그램을 종료합니다." << endl;
+            break;
+        }
+
+        cout << endl;
+    }
+
+    return 0;
+}
