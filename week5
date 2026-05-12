@@ -10,28 +10,28 @@ public:
     int count;
 
     Item() {
-        name = "";
+        name = ""; // 초기화
         price = 0;
         count = 0;
     }
 
-    Item(string n, int p, int c) {
+    Item(string n, int p, int c) { 
         name = n;
         price = p;
         count = c;
     }
 
-    int totalPrice() {
+    int totalPrice() { // 물건당 총 가격
         return price * count;
     }
 
-    void display() {
+    void display() { // 장바구니 내역
         cout << "- " << name << " [" << count << "개] : "
             << totalPrice() << "원 (단가: " << price << "원)" << endl;
     }
 };
 
-void addCart() {
+void addCart() { // 장바구니 추가 함수
     string n;
     int p, c;
 
@@ -45,6 +45,7 @@ void addCart() {
     cin >> c;
 }
 
+// 결제 함수
 void pay(Item* cart, int& count, vector<Item>& history) {   // 함수 외부의 데이터를 사용하기 위해 가져옴
     cout << endl;
     if (count == 0) {
@@ -69,9 +70,9 @@ void pay(Item* cart, int& count, vector<Item>& history) {   // 함수 외부의 
 
         if (yn == 'Y' || yn == 'y') {
             for (int i = 0; i < count; i++) {
-                history.push_back(cart[i]);
+                history.push_back(cart[i]); // 결제 내역 벡터에 기록 남김
             }
-            count = 0;
+            count = 0; 
             cout << "결제가 완료되었습니다. 장바구니를 비웁니다." << endl;
         }
         else {
