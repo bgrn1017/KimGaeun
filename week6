@@ -49,13 +49,22 @@ public:
         }
     }
 
-    template <typename U>  
-    friend void printList(const LinkedList<U>& list);   // 복사생성자
+    template <typename T>
+    friend void printList(const LinkedList<T>& list);   // 포인터변수 head를 외부 함수에서도 사용하기 위해 friend 함수 선언
+
+    LinkedList(const LinkedList<T>& other) {        // 복사생성자
+        head = nullptr;
+        Node<T>* current = other.head;
+        while (current != nullptr) {
+            append(current->data);
+            current = current->next;
+        }
+    }
 };
 
-template <typename U>   // 출력 함수 템플릿
-void printList(const LinkedList<U>& list) {
-    Node<U>* current = list.head;   // 첫번째 노드부터 시작
+template <typename T>   // 출력 함수 템플릿
+void printList(const LinkedList<T>& list) {
+    Node<T>* current = list.head;   // 첫번째 노드부터 시작
     while (current != nullptr) {    // 마지막 노드가 나올 때까지 반복
         cout << current->data << " -> ";    // 현재 노드의 값 출력 후
         current = current->next;    // 변수에 저장된 다음 노드의 주소를 따라 이동
